@@ -23,7 +23,7 @@
 </div>
 
 <h1>Privacy Policy</h1>
-<p><strong>Effective Date: April 8, 2026</strong></p>
+<p><strong>Effective Date: May 2026</strong></p>
 
 <h2>1. Introduction</h2>
 <p>CustoMoto! ("we," "our," or "us") is operated by CUSTOMOTO COMPUTER PROGRAMMING SERVICES, a sole proprietorship registered with the Department of Trade and Industry of the Philippines (DTI Business Name No. 8091235), Region IV-A (CALABARZON), Philippines.</p>
@@ -35,9 +35,10 @@
 <ul>
   <li>Email address — used to create and manage your account</li>
   <li>Password — stored in encrypted form via Firebase Authentication; we never see your plain-text password</li>
-  <li>Country and region — collected during onboarding to personalise your experience</li>
+  <li>Country and region — collected during onboarding to personalise your experience. This is information you provide or confirm — it is not precise GPS tracking. We do not continuously collect your real-time GPS location. We do not use the App to track your precise real-time GPS location for this purpose.</li>
   <li>Motorcycle details — make, model, year, and customisation preferences you enter or save</li>
   <li>Profile information — display name and other optional fields you choose to provide</li>
+  <li>Profile photo (optional) — if you choose to upload a photo from your device gallery, we collect and store the image file so it can be shown as your avatar. A profile photo may reveal what you look like or other personal details; providing it is voluntary. The image is processed on your device (resized and compressed before upload), uploaded to Google Firebase Storage (Google LLC, USA) in the Singapore region (asia-southeast1), and a secure HTTPS link is saved in your profile. We do not use your profile photo for automated identity verification or biometric identification. If you delete your account or request erasure, we will delete your profile image from Firebase Storage and clear the stored link within the retention period in Section 6.</li>
 </ul>
 <h3>2.2 Information Collected Automatically</h3>
 <ul>
@@ -45,11 +46,14 @@
   <li>Usage data — features used, screens visited, and interactions within the App</li>
   <li>Log data — IP address, access times, and crash reports</li>
   <li>Firebase Analytics data — anonymised usage patterns to improve the App</li>
+  <li>Push notifications — if you opt in, we collect and store an Expo push token in your Firebase user profile to send service and product messages related to the App. Delivery uses Expo's push notification service, which on Android uses Firebase Cloud Messaging (FCM) and on iOS uses Apple Push Notification service (APNs). You may turn off notifications in the App or in your device settings at any time.</li>
 </ul>
 <h3>2.3 Information from Third Parties</h3>
 <ul>
   <li>Google Sign-In — if you use Google OAuth to log in, we receive your name and email address from Google in accordance with Google's Privacy Policy</li>
 </ul>
+<h3>2.4 MotoBot AI Assistant</h3>
+<p>If you use MotoBot, you may choose a display name and personality for the assistant. Your messages and related session data (such as your MotoBot settings and recent chat content) are sent to Anthropic PBC (USA) through the Claude API to generate replies. Anthropic processes this information as our service provider only, not for their own advertising. Chat content is stored in your Firebase-backed account so you can view your history in the App. When you delete your account or request erasure under the Data Privacy Act, we will delete your stored MotoBot history and personalization settings together with your other account data.</p>
 
 <h2>3. How We Use Your Information</h2>
 <ul>
@@ -61,6 +65,7 @@
   <li>To detect, investigate, and prevent fraudulent or abusive activity</li>
   <li>To comply with legal obligations under Philippine law</li>
   <li>To analyse usage trends and improve our services</li>
+  <li>Automated content checks — to keep the community respectful, we use automated word-list checks on your device and our servers to review user-entered names (such as usernames and display names). Rejected names are not stored. This does not involve human review unless we investigate a reported abuse case.</li>
 </ul>
 
 <h2>4. Legal Basis for Processing</h2>
@@ -75,7 +80,8 @@
 <p>We do not sell, trade, or rent your personal information to third parties. We may share your information only in the following circumstances:</p>
 <h3>5.1 Service Providers</h3>
 <ul>
-  <li>Google Firebase — authentication, database, and hosting (Google LLC, USA). Data is stored in the asia-southeast1 (Singapore) region.</li>
+  <li>Google Firebase (Google LLC, USA) — authentication, Cloud Firestore database, Firebase Storage (for optional profile photos), security rules, and hosting. Data is processed primarily in the asia-southeast1 (Singapore) region.</li>
+  <li>Anthropic PBC (USA) — Claude API processing when you use MotoBot. Processing is performed under our instructions to provide AI-assisted responses only.</li>
   <li>Google Play Billing / Apple StoreKit — in-app purchase processing</li>
   <li>PayMongo / Xendit — local Philippine payment processing for GCash and Maya payments</li>
   <li>Cloudinary — image hosting and processing for shared build images</li>
@@ -113,6 +119,7 @@
   <li>Server-side validation for all sensitive operations including payments and subscriptions</li>
   <li>HTTPS encryption for all data in transit</li>
   <li>Rate limiting on all API endpoints to prevent abuse</li>
+  <li>Sign-in session — when you sign in, Firebase Authentication keeps an authenticated session on your device using secure local storage so you do not need to log in every time. Signing out clears the active session from the App on that device. Sign out if you share your device with others.</li>
 </ul>
 
 <h2>9. Children's Privacy</h2>
@@ -123,6 +130,7 @@
 
 <h2>11. Changes to This Policy</h2>
 <p>We may update this Privacy Policy from time to time. We will notify you of any material changes by posting the new policy in the App and updating the effective date above. Your continued use of the App after changes are posted constitutes your acceptance of the revised policy.</p>
+<p><strong>May 2026 update:</strong> Added disclosures for profile photo storage (Firebase Storage), MotoBot AI processing (Anthropic Claude API), push notifications (Expo/FCM/APNs), automated content moderation, sign-in session persistence, and expanded location data clarification.</p>
 
 <h2>12. Contact Us</h2>
 <p><strong>Data Protection Officer</strong><br>
