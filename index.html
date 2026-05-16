@@ -1,87 +1,816 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CustoMoto! — Customize Your Ride</title>
-<style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: Arial, sans-serif; background: #1A1A2E; color: #fff; }
-  .hero { padding: 60px 20px; text-align: center; }
-  .hero h1 { font-size: 48px; color: #B8860B; margin-bottom: 10px; }
-  .hero .tagline { font-size: 22px; color: #ccc; margin-bottom: 10px; }
-  .hero .sub { font-size: 16px; color: #aaa; margin-bottom: 40px; }
-  .badge { display: inline-block; background: #B8860B; color: #1A1A2E; padding: 8px 20px; border-radius: 20px; font-weight: bold; font-size: 14px; margin-bottom: 40px; }
-  .features { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; padding: 40px 20px; max-width: 900px; margin: 0 auto; }
-  .feature { background: #16213E; border: 1px solid #B8860B33; border-radius: 12px; padding: 24px; width: 260px; text-align: center; }
-  .feature .icon { font-size: 36px; margin-bottom: 12px; }
-  .feature h3 { color: #B8860B; margin-bottom: 8px; }
-  .feature p { color: #aaa; font-size: 14px; line-height: 1.5; }
-  .coming { text-align: center; padding: 40px 20px; }
-  .coming h2 { color: #B8860B; margin-bottom: 10px; }
-  .coming p { color: #aaa; font-size: 15px; }
-  .footer { text-align: center; padding: 30px 20px; border-top: 1px solid #333; font-size: 13px; color: #666; }
-  .footer a { color: #B8860B; text-decoration: none; }
-  .footer a:hover { text-decoration: underline; }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CustoMoto! — The Vehicle Customization App for Builders</title>
+  <meta name="description" content="Visualize your dream build, get AI advice, find nearby shops, and connect with a community of builders. CustoMoto! is the vehicle customization app for builders who take their craft seriously.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --gold: #F5C842;
+      --gold-dim: #C9A227;
+      --gold-dark: #7A5F10;
+      --bg: #0D0D0F;
+      --bg-card: #141418;
+      --bg-card2: #1A1A20;
+      --border: rgba(245, 200, 66, 0.15);
+      --text: #E8E8E8;
+      --text-muted: #888;
+      --text-dim: #555;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Barlow', sans-serif;
+      font-weight: 400;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* NOISE TEXTURE OVERLAY */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.4;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 20px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(13,13,15,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      font-size: 1.5rem;
+      color: var(--gold);
+      letter-spacing: 0.02em;
+      text-decoration: none;
+    }
+
+    .nav-cta {
+      background: var(--gold);
+      color: #0D0D0F;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 0.9rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 10px 24px;
+      border-radius: 4px;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.15s;
+    }
+
+    .nav-cta:hover {
+      background: #FFD84D;
+      transform: translateY(-1px);
+    }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 120px 24px 80px;
+      position: relative;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(245,200,66,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-eyebrow {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 600;
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 24px;
+      opacity: 0;
+      animation: fadeUp 0.6s ease forwards 0.1s;
+    }
+
+    .hero-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      font-size: clamp(4rem, 12vw, 9rem);
+      line-height: 0.92;
+      letter-spacing: -0.01em;
+      color: #fff;
+      margin-bottom: 8px;
+      opacity: 0;
+      animation: fadeUp 0.6s ease forwards 0.2s;
+    }
+
+    .hero-title span {
+      color: var(--gold);
+    }
+
+    .hero-tagline {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 400;
+      font-size: clamp(1rem, 2.5vw, 1.4rem);
+      color: var(--text-muted);
+      letter-spacing: 0.04em;
+      margin-top: 20px;
+      margin-bottom: 48px;
+      max-width: 560px;
+      opacity: 0;
+      animation: fadeUp 0.6s ease forwards 0.35s;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      justify-content: center;
+      opacity: 0;
+      animation: fadeUp 0.6s ease forwards 0.5s;
+    }
+
+    .btn-primary {
+      background: var(--gold);
+      color: #0D0D0F;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 16px 36px;
+      border-radius: 4px;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+      box-shadow: 0 0 32px rgba(245,200,66,0.25);
+    }
+
+    .btn-primary:hover {
+      background: #FFD84D;
+      transform: translateY(-2px);
+      box-shadow: 0 0 48px rgba(245,200,66,0.4);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--text-muted);
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 600;
+      font-size: 1rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 16px 36px;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      text-decoration: none;
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--gold-dim);
+      color: var(--gold);
+    }
+
+    /* DIVIDER */
+    .divider {
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+      margin: 0 auto;
+    }
+
+    /* STATS BAR */
+    .stats-bar {
+      padding: 48px 40px;
+      display: flex;
+      justify-content: center;
+      gap: 64px;
+      flex-wrap: wrap;
+      position: relative;
+    }
+
+    .stat {
+      text-align: center;
+      opacity: 0;
+      animation: fadeUp 0.5s ease forwards;
+    }
+
+    .stat:nth-child(1) { animation-delay: 0.1s; }
+    .stat:nth-child(2) { animation-delay: 0.2s; }
+    .stat:nth-child(3) { animation-delay: 0.3s; }
+    .stat:nth-child(4) { animation-delay: 0.4s; }
+
+    .stat-number {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      font-size: 2.4rem;
+      color: var(--gold);
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-top: 4px;
+    }
+
+    /* SECTIONS */
+    section {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 80px 24px;
+    }
+
+    .section-label {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 600;
+      font-size: 0.7rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      line-height: 1;
+      color: #fff;
+      margin-bottom: 48px;
+    }
+
+    /* FEATURE GRID */
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .feature-card {
+      background: var(--bg-card);
+      padding: 36px 32px;
+      transition: background 0.2s;
+      position: relative;
+    }
+
+    .feature-card:hover {
+      background: var(--bg-card2);
+    }
+
+    .feature-icon {
+      font-size: 2rem;
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .feature-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 1.3rem;
+      color: #fff;
+      margin-bottom: 10px;
+      letter-spacing: 0.02em;
+    }
+
+    .feature-desc {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.65;
+    }
+
+    .feature-badge {
+      display: inline-block;
+      background: rgba(245,200,66,0.12);
+      color: var(--gold);
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 600;
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 2px;
+      margin-top: 14px;
+    }
+
+    /* SUBSCRIPTION SECTION */
+    .plans {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+      margin-top: 48px;
+    }
+
+    .plan-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 36px 28px;
+      position: relative;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .plan-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--gold-dim);
+    }
+
+    .plan-card.featured {
+      border-color: var(--gold);
+      background: linear-gradient(135deg, #141418 0%, #1c1a0f 100%);
+    }
+
+    .plan-badge {
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--gold);
+      color: #0D0D0F;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 4px 16px;
+      border-radius: 2px;
+      white-space: nowrap;
+    }
+
+    .plan-name {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      font-size: 1.6rem;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+
+    .plan-price {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 2.4rem;
+      color: var(--gold);
+      line-height: 1;
+      margin: 16px 0 4px;
+    }
+
+    .plan-price span {
+      font-size: 1rem;
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+
+    .plan-period {
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      margin-bottom: 24px;
+    }
+
+    .plan-features {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .plan-features li {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .plan-features li::before {
+      content: '✓';
+      color: var(--gold);
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .plan-features li.no::before {
+      content: '—';
+      color: var(--text-dim);
+    }
+
+    /* REFERRAL SECTION */
+    .referral-block {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 48px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: center;
+    }
+
+    .referral-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      font-size: clamp(1.8rem, 3vw, 2.6rem);
+      color: #fff;
+      line-height: 1.05;
+      margin-bottom: 16px;
+    }
+
+    .referral-title span { color: var(--gold); }
+
+    .referral-desc {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+      margin-bottom: 24px;
+    }
+
+    .referral-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .referral-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+    }
+
+    .step-num {
+      width: 32px;
+      height: 32px;
+      background: rgba(245,200,66,0.12);
+      border: 1px solid var(--gold-dark);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: var(--gold);
+      flex-shrink: 0;
+    }
+
+    .step-text {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+      padding-top: 6px;
+    }
+
+    .step-text strong {
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    /* CLAN SECTION */
+    .clan-block {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 48px;
+      text-align: center;
+    }
+
+    .clan-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      font-size: clamp(1.8rem, 3vw, 2.6rem);
+      color: #fff;
+      margin-bottom: 16px;
+    }
+
+    .clan-title span { color: var(--gold); }
+
+    .clan-desc {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      max-width: 560px;
+      margin: 0 auto 36px;
+      line-height: 1.7;
+    }
+
+    .clan-features {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .clan-pill {
+      background: rgba(245,200,66,0.08);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      padding: 8px 20px;
+      border-radius: 100px;
+    }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 40px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .footer-logo {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      font-size: 1.2rem;
+      color: var(--gold);
+    }
+
+    .footer-legal {
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      line-height: 1.6;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 24px;
+    }
+
+    .footer-links a {
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover { color: var(--gold); }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* MOBILE */
+    @media (max-width: 768px) {
+      nav { padding: 16px 20px; }
+      .stats-bar { gap: 32px; padding: 40px 20px; }
+      .referral-block { grid-template-columns: 1fr; gap: 32px; padding: 32px 24px; }
+      .clan-block { padding: 32px 24px; }
+      footer { flex-direction: column; align-items: flex-start; padding: 32px 20px; }
+      .feature-grid { grid-template-columns: 1fr; }
+    }
+  </style>
 </head>
 <body>
 
-<div class="hero">
-  <h1>CustoMoto!</h1>
-  <div class="tagline">Gusto mo 'to!</div>
-  <div class="sub">Customize Your Motor Vehicle & Cycle</div>
-  <div class="badge">🇵🇭 Built for Filipino Riders</div>
-  <p style="color:#aaa; font-size:15px;">Coming soon to Google Play & App Store</p>
-</div>
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="nav-logo">CustoMoto!</a>
+    <a href="https://play.google.com/store/apps/details?id=ph.customoto.app" target="_blank" class="nav-cta">Get the App</a>
+  </nav>
 
-<div class="features">
-  <div class="feature">
-    <div class="icon">🎨</div>
-    <h3>Visual Customizer</h3>
-    <p>See your dream bike color scheme before you paint it. Real illustrations for 10 popular PH bikes.</p>
+  <!-- HERO -->
+  <div class="hero">
+    <p class="hero-eyebrow">Now live on Google Play</p>
+    <h1 class="hero-title">Custo<span>Moto!</span></h1>
+    <p class="hero-tagline">The vehicle customization app for builders who take their craft seriously.</p>
+    <div class="hero-actions">
+      <a href="https://play.google.com/store/apps/details?id=ph.customoto.app" target="_blank" class="btn-primary">Download on Google Play</a>
+      <a href="#features" class="btn-secondary">See Features</a>
+    </div>
   </div>
-  <div class="feature">
-    <div class="icon">🤖</div>
-    <h3>MotoBot AI</h3>
-    <p>Ask anything about your bike in Tagalog or English. AI-powered parts and upgrade advice.</p>
-  </div>
-  <div class="feature">
-    <div class="icon">🏆</div>
-    <h3>Clan Competition</h3>
-    <p>Join a clan, build your dream ride, and compete on the leaderboard with riders nationwide.</p>
-  </div>
-  <div class="feature">
-    <div class="icon">🔧</div>
-    <h3>Parts Advisor</h3>
-    <p>21 upgrade parts with real Philippine prices and compatibility badges for your specific bike.</p>
-  </div>
-  <div class="feature">
-    <div class="icon">📍</div>
-    <h3>Nearby Stores</h3>
-    <p>Find motorcycle parts shops near you on the map. Metro Manila first, then nationwide.</p>
-  </div>
-  <div class="feature">
-    <div class="icon">📸</div>
-    <h3>Build Gallery</h3>
-    <p>Share your dream build with the community. Export and share your custom bike image.</p>
-  </div>
-</div>
 
-<div class="coming">
-  <h2>Launching Soon</h2>
-  <p>CustoMoto! is currently in beta testing.<br>Follow us for launch updates.</p>
-</div>
+  <div class="divider"></div>
 
-<div class="footer">
-  <p>CustoMoto! — CUSTOMOTO COMPUTER PROGRAMMING SERVICES</p>
-  <p>DTI Business Name No. 8091235 — Region IV-A (CALABARZON), Philippines</p>
-  <br>
-  <p>
-    <a href="privacy.html">Privacy Policy</a> &nbsp;|&nbsp;
-    <a href="terms.html">Terms of Service</a>
-  </p>
-</div>
+  <!-- STATS -->
+  <div class="stats-bar">
+    <div class="stat">
+      <div class="stat-number">40+</div>
+      <div class="stat-label">Bike Illustrations</div>
+    </div>
+    <div class="stat">
+      <div class="stat-number">3</div>
+      <div class="stat-label">Subscription Tiers</div>
+    </div>
+    <div class="stat">
+      <div class="stat-number">AI</div>
+      <div class="stat-label">Powered MotoBot</div>
+    </div>
+    <div class="stat">
+      <div class="stat-number">Free</div>
+      <div class="stat-label">To Get Started</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- FEATURES -->
+  <section id="features">
+    <p class="section-label">What's Inside</p>
+    <h2 class="section-title">Everything a builder needs.</h2>
+    <div class="feature-grid">
+
+      <div class="feature-card">
+        <span class="feature-icon">🎨</span>
+        <div class="feature-title">Visual Customizer</div>
+        <div class="feature-desc">Pick from 40+ flat motorcycle illustrations and preview color combinations before spending a peso on paint. See exactly how your build will look.</div>
+      </div>
+
+      <div class="feature-card">
+        <span class="feature-icon">🤖</span>
+        <div class="feature-title">MotoBot AI</div>
+        <div class="feature-desc">Your personal AI mechanic. Ask MotoBot anything about your bike -- build advice, parts compatibility, maintenance tips, upgrade recommendations. Available 24/7.</div>
+        <span class="feature-badge">Powered by Claude AI</span>
+      </div>
+
+      <div class="feature-card">
+        <span class="feature-icon">🔧</span>
+        <div class="feature-title">Parts Advisor</div>
+        <div class="feature-desc">Browse parts by category, fitment, and brand. Find what fits your specific bike. Community members earn Moto Coins by submitting parts to grow the catalog.</div>
+      </div>
+
+      <div class="feature-card">
+        <span class="feature-icon">📍</span>
+        <div class="feature-title">Nearby Stores</div>
+        <div class="feature-desc">Find motorcycle parts shops and service centers near you on a live map. Get directions, phone numbers, and open/closed status at a glance.</div>
+        <span class="feature-badge">Rider Pro Feature</span>
+      </div>
+
+      <div class="feature-card">
+        <span class="feature-icon">🪙</span>
+        <div class="feature-title">Moto Coins</div>
+        <div class="feature-desc">Earn coins by contributing parts to the catalog. Spend them in the Moto Store on rename vouchers, extra build slots, and exclusive color unlocks.</div>
+      </div>
+
+      <div class="feature-card">
+        <span class="feature-icon">📸</span>
+        <div class="feature-title">Build Gallery</div>
+        <div class="feature-desc">Save your Dream Builds and Garage builds separately. Export and share your custom bike image with the community or on social media.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- PLANS -->
+  <section id="plans">
+    <p class="section-label">Pricing</p>
+    <h2 class="section-title">Start free. Upgrade when ready.</h2>
+    <div class="plans">
+
+      <div class="plan-card">
+        <div class="plan-name">Free Rider</div>
+        <div class="plan-price">Free <span></span></div>
+        <div class="plan-period">No credit card needed</div>
+        <ul class="plan-features">
+          <li>2 build slots</li>
+          <li>5 MotoBot messages per day</li>
+          <li>3 AI Verdicts per day</li>
+          <li>Clan membership (once)</li>
+          <li>Parts Advisor access</li>
+          <li class="no">Nearby Stores details</li>
+          <li class="no">Unlimited clan joins</li>
+          <li class="no">Clan creation</li>
+        </ul>
+      </div>
+
+      <div class="plan-card featured">
+        <div class="plan-badge">Most Popular</div>
+        <div class="plan-name">Rider Pro</div>
+        <div class="plan-price">&#x20B1;99 <span>/ month</span></div>
+        <div class="plan-period">or &#x20B1;799 / year -- save 33%</div>
+        <ul class="plan-features">
+          <li>Unlimited build slots</li>
+          <li>30 MotoBot messages per day</li>
+          <li>Unlimited AI Verdicts</li>
+          <li>Nearby Stores with phone + hours</li>
+          <li>Unlimited clan joins</li>
+          <li class="no">Clan creation</li>
+        </ul>
+      </div>
+
+      <div class="plan-card">
+        <div class="plan-name">Clan Commander</div>
+        <div class="plan-price">&#x20B1;199 <span>/ month</span></div>
+        <div class="plan-period">or &#x20B1;1,599 / year -- save 33%</div>
+        <ul class="plan-features">
+          <li>Everything in Rider Pro</li>
+          <li>Unlimited MotoBot messages</li>
+          <li>Create and manage your own clan</li>
+          <li>Approve or reject clan members</li>
+          <li>Commander badge on profile</li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- REFERRAL -->
+  <section id="referral">
+    <div class="referral-block">
+      <div>
+        <p class="section-label">Invite a Friend</p>
+        <h2 class="referral-title">Earn free<br><span>subscription months.</span></h2>
+        <p class="referral-desc">Share your referral link. When friends subscribe and stay subscribed for 30 days, you earn progress toward free months. No expiry -- your referrals count forever.</p>
+      </div>
+      <div class="referral-steps">
+        <div class="referral-step">
+          <div class="step-num">1</div>
+          <div class="step-text"><strong>Share your link</strong> from the Invite a Friend screen in your Profile.</div>
+        </div>
+        <div class="referral-step">
+          <div class="step-num">2</div>
+          <div class="step-text"><strong>4 successful referrals</strong> = 1 free month of Rider Pro (&#x20B1;99 value).</div>
+        </div>
+        <div class="referral-step">
+          <div class="step-num">3</div>
+          <div class="step-text"><strong>8 successful referrals</strong> = 1 free month of Clan Commander (&#x20B1;199 value). Hold off claiming at 4 to go all the way.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- CLANS -->
+  <section id="clans">
+    <div class="clan-block">
+      <p class="section-label" style="text-align:center">Community</p>
+      <h2 class="clan-title">Ride together.<br><span>Build together.</span></h2>
+      <p class="clan-desc">Join a clan, connect with fellow builders, and chat about builds, parts, and everything moto. Commanders create and manage their own clans with full member control.</p>
+      <div class="clan-features">
+        <span class="clan-pill">Clan Chat</span>
+        <span class="clan-pill">Member Management</span>
+        <span class="clan-pill">@Username System</span>
+        <span class="clan-pill">Parts Bounty Community</span>
+        <span class="clan-pill">Activity Feed</span>
+        <span class="clan-pill">Clan Commander Role</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- FINAL CTA -->
+  <section style="text-align:center; padding: 80px 24px;">
+    <p class="section-label">Get Started</p>
+    <h2 class="section-title" style="margin-bottom:16px;">Your dream build<br>starts here.</h2>
+    <p style="color:var(--text-muted); font-size:0.95rem; margin-bottom:36px;">Free to download. Free to start. No credit card required.</p>
+    <a href="https://play.google.com/store/apps/details?id=ph.customoto.app" target="_blank" class="btn-primary">Download on Google Play</a>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">CustoMoto!</div>
+    <div class="footer-legal">
+      CUSTOMOTO COMPUTER PROGRAMMING SERVICES<br>
+      DTI Business Name No. 8091235
+    </div>
+    <div class="footer-links">
+      <a href="https://customotoapp.github.io/privacy.html">Privacy Policy</a>
+      <a href="https://customotoapp.github.io/terms.html">Terms of Service</a>
+    </div>
+  </footer>
 
 </body>
 </html>
